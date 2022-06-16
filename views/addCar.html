@@ -87,11 +87,10 @@
                         "zip": $("[name=zip]").val()
                     }
                 }).done(function (response) {
-                    //TODO: bootstrap notification will be added on update.
-                    // setTimeout(function(){
-                    //     window.location = "/cars";
-
-                    // }, 5000);
+                    $("#updateNotification").show();
+                    setTimeout(function(){
+                        window.location = "/cars";
+                    }, 5000);
                 })
                 .fail(function () {
                     console.log("fail")
@@ -206,6 +205,9 @@
     </div>
     <div class="alert alert-success container" id="addNotification" style="display: none;">
         <strong>Success!</strong> You added a car. The page will be redirected to Cars Page in 5 seconds. 
+    </div>
+    <div class="alert alert-success container" id="updateNotification" style="display: none;">
+        <strong>Success!</strong> You update the car. The page will be redirected to Cars Page in 5 seconds. 
     </div>
     
 </body>

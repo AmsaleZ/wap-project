@@ -4,9 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/style.css">
+
     <title>404 Not Found</title>
 </head>
 <body>
-    404 Not Found
+    <header>
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="/cars"><img src="/img/cars-logo.png" alt="Cars">
+                            <h1>Cars Page</h1>
+                        </a></li>
+                    <li><a href="/cars">Cars</a></li>
+                    <li><a href="/addCar">Add Car</a></li>
+                </ul>
+                <a href="javascript:;" id="logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container not-found-page">
+        <div class="left-block">
+            <h1>Sorry, that page isn't here.</h1>
+            <h2>We may have moved the page you’re looking for or you may have typed the address incorrectly.</h2>
+            <h3>What you can do:</h3>
+                <ul>
+                    <li>Visit our homepage to find the content you were searching for.</li>
+                    <li>If you typed the address (URL), check the spelling.</li>
+                </ul>
+        </div>
+        <div class="right-block">
+            <div class="error-page-background-image">
+                <img src="/img/400-error-page-image.jpg" alt="400-error-page-image">
+                <div class="error-section-color"></div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

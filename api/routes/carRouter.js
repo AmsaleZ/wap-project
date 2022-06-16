@@ -16,6 +16,13 @@ router.use((req, res, next) => {
   next();
 });
 
+router.route("/").get((req, res) => {
+  if (loggedIn)
+    res.redirect("/cars")
+  else
+    res.redirect("/login");
+})
+
 router.route("/login/")
   .get((req, res) => {
     if (loggedIn)
