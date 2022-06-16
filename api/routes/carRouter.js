@@ -8,6 +8,11 @@ let loggedIn = false;
 
 router.use((req, res, next) => {
   loggedIn = req.cookies['isLoggedIn'];
+  rememberMe = req.cookies['rememberMe'];
+  if(rememberMe) {
+    loggedIn = true;
+    res.cookie('isLoggedIn', true);
+  }
   next();
 });
 
@@ -16,17 +21,33 @@ router.route("/login/")
     if (loggedIn)
       res.redirect("/cars");
     else
-      res.render("login");
+      res.render("login", {error: null});
   })
   .post((req, res) => {
     if (req.body.username == username && req.body.password == password) {
       res.cookie("isLoggedIn", true);
+      if(req.body.rememberMe == 'true') {
+        let oneYear = 365 * 24 * 3600 * 1000;
+        res.cookie("rememberMe", true, {maxAge : oneYear, expires: new Date(Date.now() + oneYear)});
+      }else {
+        res.clearCookie('rememberMe');
+      }
       res.redirect("/cars");
     } else {
-      res.cookie("isLoggedIn", false);
-      res.redirect("/login");
+      res.clearCookie('isLoggedIn');
+      res.clearCookie('rememberMe');
+      res.render("login", {error: "Username or password is wrong!"});
     }
   });
+
+  router
+  .route('/logout')
+  .get((req, res) => {
+    loggedIn = null;
+    res.clearCookie('isLoggedIn');
+    res.clearCookie('rememberMe');
+    res.redirect("/login")
+  })
 
 router
   .route("/cars/")
@@ -93,7 +114,10 @@ router
   })
 
 router.use((req, res, next) => {
-  res.render("404")
-})
+  if (loggedIn)
+    res.render("404")
+  else
+    res.redirect("/login")
+  })
 
 module.exports = router;

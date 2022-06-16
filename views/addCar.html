@@ -6,13 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Car</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
     <!-- ✅ load jQuery ✅ -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script>
         const id = location.pathname.split("/")[2];
 
         $(function () {
+            $("form").submit(function(e) {
+                e.preventDefault();
+            });
             if (id) {
                 $.ajax("/getCarDetail", {
                         "type": "POST",
@@ -27,7 +34,8 @@
                         $("[name=zip]").val(response.car.zip);
                         $("#save").show();
                         $("#add").hide();
-                        $("#delete").show();
+                        $("#delete-button").show();
+                        $("h1").html("Edit Car");
                     })
                     .fail(function () {
                         console.log("fail")
@@ -35,9 +43,10 @@
             } else {
                 $("#add").show();
                 $("#save").hide();
-                $("#delete").hide();
+                $("#delete-button").hide();
+                $("h1").html("Add Car");
             }
-            
+
             $("#add").click(addCar);
             $("#save").click(updateCar);
             $("#delete").click(deleteCar);
@@ -56,9 +65,10 @@
                         "zip": $("[name=zip]").val()
                     }
                 }).done(function (response) {
-                    console.log("response.success", response.success);
-                    //TODO: bootstrap notification will be added on update.
-                    $("body").append("ADDED");
+                    $("#addNotification").show();
+                    setTimeout(function(){
+                        window.location = "/cars";
+                    }, 5000);
                 })
                 .fail(function () {
                     console.log("fail")
@@ -77,9 +87,11 @@
                         "zip": $("[name=zip]").val()
                     }
                 }).done(function (response) {
-                    console.log("response.success", response.success);
                     //TODO: bootstrap notification will be added on update.
-                    $("body").append("UPDATED");
+                    // setTimeout(function(){
+                    //     window.location = "/cars";
+
+                    // }, 5000);
                 })
                 .fail(function () {
                     console.log("fail")
@@ -95,7 +107,11 @@
                 }).done(function (response) {
                     console.log("response.success", response.success);
                     //TODO: bootstrap notification will be added on update.
-                    $("body").append("DELETED");
+                    $("#notification").show();
+                    $("#deleteModal").modal("hide");    
+                    setTimeout(function(){
+                        window.location = "/cars";
+                    }, 5000);
                 })
                 .fail(function () {
                     console.log("fail")
@@ -105,27 +121,93 @@
 </head>
 
 <body>
-    <select type="text" name="newOrUsed">
-        <option value="New Cars">New Cars</option>
-        <option value="Used Cars">Used Cars</option>
-    </select>
-    <select type="text" name="make">
-        <option value="Acura">Acura</option>
-        <option value="Audi">Audi</option>
-        <option value="BMW">BMW</option>
-        <option value="Buick">Buick</option>
-    </select>
-    <select type="text" name="model">
-        <option value="ATS">ATS</option>
-        <option value="ATS-V">ATS-V</option>
-        <option value="Allante">Allante</option>
-        <option value="Brougham">Brougham</option>
-    </select>
-    <input type="text" name="distance">
-    <input type="text" name="zip">
-    <button id="add">Add</button>
-    <button id="save">Save</button>
-    <button id="delete">Delete</button>
+    <header>
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="/cars"><img src="/img/cars-logo.png" alt="Cars">
+                            <h1>Cars Page</h1>
+                        </a></li>
+                    <li><a href="/cars">Cars</a></li>
+                    <li><a href="/addCar">Add Car</a></li>
+                </ul>
+                <a href="javascript:;" id="logout">Logout</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h1 class="subpage-title"></h1>
+        <form class="form-block" action="">
+            <div class="form-control-custom">
+                <label for="newOrUsed">New or Used
+                    <select type="text" name="newOrUsed" id="newOrUsed">
+                        <option value="New Cars">New Cars</option>
+                        <option value="Used Cars">Used Cars</option>
+                    </select>
+                </label>
+            </div>
+            <div class="form-control-custom">
+                <label for="make">Make
+                    <select type="text" name="make" id="make">
+                        <option value="Acura">Acura</option>
+                        <option value="Audi">Audi</option>
+                        <option value="BMW">BMW</option>
+                        <option value="Buick">Buick</option>
+                    </select>
+                </label>
+            </div>
+            <div class="form-control-custom">
+                <label for="model">Model
+                    <select type="text" name="model" id="model">
+                        <option value="ATS">ATS</option>
+                        <option value="ATS-V">ATS-V</option>
+                        <option value="Allante">Allante</option>
+                        <option value="Brougham">Brougham</option>
+                    </select>
+                </label>
+            </div>
+            <div class="form-control-custom">
+                <label for="distance">Distance
+                    <input type="number" name="distance" id="distance" required maxlength="7">
+                </label>
+            </div>
+            <div class="form-control-custom">
+                <label for="zip">Zip
+                    <input type="number" name="zip" id="zip" required maxlength="5" minlength="5">
+                </label>
+            </div>
+            <button class="btn btn-primary" id="add">Add</button>
+            <button class="btn btn-success" id="save">Save</button>
+            <button class="btn btn-danger" type="button" id="delete-button" data-toggle="modal" data-target="#deleteModal">Delete</button>
+        </form>
+    </div>
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Car</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure to delete this car?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" id="delete" >Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-danger container" id="notification" style="display: none;">
+        <strong>Success!</strong> You deleted the car. The page will be redirected to Cars Page in 5 seconds. 
+    </div>
+    <div class="alert alert-success container" id="addNotification" style="display: none;">
+        <strong>Success!</strong> You added a car. The page will be redirected to Cars Page in 5 seconds. 
+    </div>
+    
 </body>
 
 </html>
