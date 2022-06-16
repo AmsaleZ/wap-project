@@ -5,6 +5,13 @@ const messageHandler = require("./messageHandler");
 const addNewCar = function (req, res) {
   let newCar = req.body;
   console.log("newCar",newCar)
+  //newCar {
+  //   newOrUsed: 'New Cars',
+  //   make: 'Acura',        
+  //   model: 'ATS',
+  //   distance: '123124',   
+  //   zip: '123'
+  // }
   Car.create(newCar)
     .then((car) => 
       {
@@ -33,6 +40,7 @@ const getAllCars = function (req, res) {
     .exec()
     .then((cars) =>
       {
+        //for jQuery DataTable we change the array of objects to array of arrays with this map method
         res.send({cars: cars.map(x => [x.newOrUsed, x.distance, x.make, x.model, x.zip, x._id])});
         // return messageHandler.setResponseAndSend(res, cars, process.env.SUCCESS_MESSAGE)
       }
@@ -57,6 +65,7 @@ const getCarDetail = function (req, res) {
 };
 
 const updateCar = function (req, res) {
+  //It works with the save button
   const newOrUsed = req.body.newOrUsed;
   const distance = req.body.distance;
   const make = req.body.make;
@@ -76,11 +85,6 @@ const updateCar = function (req, res) {
 }
 
 const deleteCar = function (req, res) {
-  const newOrUsed = req.body.newOrUsed;
-  const distance = req.body.distance;
-  const make = req.body.make;
-  const model = req.body.model;
-  const zip = req.body.zip;
   Car.deleteOne({_id: req.body.id})
   .exec()
   .then((car) =>

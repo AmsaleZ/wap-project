@@ -27,6 +27,7 @@
                             "id": id
                         }
                     }).done(function (response) {
+                        console.log("response",response);
                         $("[name=newOrUsed]").val(response.car.newOrUsed);
                         $("[name=make]").val(response.car.make);
                         $("[name=model]").val(response.car.model);
@@ -52,6 +53,16 @@
             $("#delete").click(deleteCar);
 
 
+            $('#logout').click(function() {
+                    $.ajax("/logout", {
+                        "type": "GET",
+                    }).done(function (response) {
+                        window.location = "/login"
+                    })
+                    .fail(function () {
+                        console.log("fail")
+                    });
+                })
         })
 
         function addCar() {
@@ -104,8 +115,6 @@
                         "id": id,
                     }
                 }).done(function (response) {
-                    console.log("response.success", response.success);
-                    //TODO: bootstrap notification will be added on update.
                     $("#notification").show();
                     $("#deleteModal").modal("hide");    
                     setTimeout(function(){

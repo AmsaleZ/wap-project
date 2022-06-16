@@ -31,20 +31,33 @@
     ></script>
     <script>
         $(function(){
+            //this one works once everytime page loads
             $.ajax("/allCars", {
                     "type": "GET",
                 }).done(function (response) {
+                    //you give the array of arrays to datatable
                     $('#carsTable').DataTable({
                         data: response.cars,
+                        // data: [
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        //     ["123",'qwe','asd','qwe','wasd', "123123"],
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        //     ["123",'qwe','asd','qwe','asd', "123123"],
+                        // ],
                         columns: [
                             { title: 'New or Used' },
-                            { title: 'Distance' },
                             { title: 'Make' },
                             { title: 'Model' },
+                            { title: 'Distance' },
                             { title: 'Zip' },
                             { title: "",
-                                "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                    $(nTd).html("<a href='/addCar/"+sData+"'>Edit</a>");
+                                "fnCreatedCell": function (nTd, id, oData, iRow, iCol) {
+                                    $(nTd).html("<a href='/addCar/"+id+"'>Edit</a>");
                                 }
                             },
                         ],
@@ -58,6 +71,7 @@
                     $.ajax("/logout", {
                         "type": "GET",
                     }).done(function (response) {
+                        //redirection in the frontend
                         window.location = "/login"
                     })
                     .fail(function () {
