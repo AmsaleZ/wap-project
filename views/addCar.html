@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Car</title>
+    <!-- ✅ load jQuery ✅ -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        const id = location.pathname.split("/")[2];
+
+        $(function () {
+            if (id) {
+                $.ajax("/getCarDetail", {
+                        "type": "POST",
+                        "data": {
+                            "id": id
+                        }
+                    }).done(function (response) {
+                        $("[name=newOrUsed]").val(response.car.newOrUsed);
+                        $("[name=make]").val(response.car.make);
+                        $("[name=model]").val(response.car.model);
+                        $("[name=distance]").val(response.car.distance);
+                        $("[name=zip]").val(response.car.zip);
+                        $("#save").show();
+                        $("#add").hide();
+                        $("#delete").show();
+                    })
+                    .fail(function () {
+                        console.log("fail")
+                    });
+            } else {
+                $("#add").show();
+                $("#save").hide();
+                $("#delete").hide();
+            }
+            
+            $("#add").click(addCar);
+            $("#save").click(updateCar);
+            $("#delete").click(deleteCar);
+
+
+        })
+
+        function addCar() {
+            $.ajax("/addCar", {
+                    "type": "POST",
+                    "data": {
+                        "newOrUsed": $("[name=newOrUsed]").val(),
+                        "make": $("[name=make]").val(),
+                        "model": $("[name=model]").val(),
+                        "distance": $("[name=distance]").val(),
+                        "zip": $("[name=zip]").val()
+                    }
+                }).done(function (response) {
+                    console.log("response.success", response.success);
+                    //TODO: bootstrap notification will be added on update.
+                    $("body").append("ADDED");
+                })
+                .fail(function () {
+                    console.log("fail")
+                });
+        }
+
+        function updateCar() {
+            $.ajax("/updateCar", {
+                    "type": "POST",
+                    "data": {
+                        "id": id,
+                        "newOrUsed": $("[name=newOrUsed]").val(),
+                        "make": $("[name=make]").val(),
+                        "model": $("[name=model]").val(),
+                        "distance": $("[name=distance]").val(),
+                        "zip": $("[name=zip]").val()
+                    }
+                }).done(function (response) {
+                    console.log("response.success", response.success);
+                    //TODO: bootstrap notification will be added on update.
+                    $("body").append("UPDATED");
+                })
+                .fail(function () {
+                    console.log("fail")
+                });
+        }
+
+        function deleteCar() {
+            $.ajax("/deleteCar", {
+                    "type": "POST",
+                    "data": {
+                        "id": id,
+                    }
+                }).done(function (response) {
+                    console.log("response.success", response.success);
+                    //TODO: bootstrap notification will be added on update.
+                    $("body").append("DELETED");
+                })
+                .fail(function () {
+                    console.log("fail")
+                });
+        }
+    </script>
+</head>
+
+<body>
+    <select type="text" name="newOrUsed">
+        <option value="New Cars">New Cars</option>
+        <option value="Used Cars">Used Cars</option>
+    </select>
+    <select type="text" name="make">
+        <option value="Acura">Acura</option>
+        <option value="Audi">Audi</option>
+        <option value="BMW">BMW</option>
+        <option value="Buick">Buick</option>
+    </select>
+    <select type="text" name="model">
+        <option value="ATS">ATS</option>
+        <option value="ATS-V">ATS-V</option>
+        <option value="Allante">Allante</option>
+        <option value="Brougham">Brougham</option>
+    </select>
+    <input type="text" name="distance">
+    <input type="text" name="zip">
+    <button id="add">Add</button>
+    <button id="save">Save</button>
+    <button id="delete">Delete</button>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+   
+
+    <hr id="topHr">
+
+    <div id="signIn">
+        Log in
+    </div>
+
+    <form action="/login" method="post">
+        <div class="container">
+            <div id="dealer">New to Cars.com? <span style="color: purple;">Sign up</span>. Are you a <span style="color: purple;">dealer?</span></div>
+
+            <div id="uname">
+                <input type="text" placeholder="Email" name="username" required id="users">
+            </div>
+
+            <div>
+                <input type="password" placeholder="Password" name="password" required id="pass">
+            </div>
+
+            <div id="privacy">By Loging in to your profile, you agree to our <span style="color: purple;">privacy Statement </span>and <span style="color: purple;">Terms of Service.</span>
+            </div>
+
+            <div>
+                <input type="checkbox" name="remember"> <span style="color: purple;">Remember me</span>
+            </div>
+
+            <button type="submit">Sign in</button>
+        </div>
+
+    </form>
+    <hr id="bottomHr">
+</body>
+</html>
